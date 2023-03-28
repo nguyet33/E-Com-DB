@@ -3,25 +3,22 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
 class ProductTag extends Model {}
-//producttag model that creates a junction table that has the columns product_id(int), tag_id(int), and id as primary key column 
 
 ProductTag.init(
+  // define columns
   {
     id: {
-      type:DataTypes.INTEGER,
-      allowNull:false,
+      type: DataTypes.INTEGER, 
+      autoIncrement: true,
       primaryKey: true,
-      autoIncrement: true
+      allowNull: false,
     },
-    product_id : {
-      type:DataTypes.INTEGER,
-      allowNull:false
-    },
-    tag_id : {
-      type:DataTypes.INTEGER,
-      allowNull:false
-    }
+
+    product_id: {type: DataTypes.INTEGER, references: {model: 'product', key: 'id'}},
+
+    tag_id: { type: DataTypes.INTEGER, references: {model: 'tag', key: 'id'}}
   },
+
   {
     sequelize,
     timestamps: false,
