@@ -3,13 +3,14 @@ A web application that sends json data on product inventory
 
 ## Description
 
-This application is an api that spits of data of product inventory and associated tags and category related to the product. You are able to get all the data of a product, categary and tag. You are also able to update existing products, category and tag. You can also delete data from the database. Everything is achieve with REST api so you need to send a get/post/put/delete request with required data in the body for it to work. 
-
-What I learn from this project is the use of mysql with sequelize. I was able to use models to create tables and use routes to create request to return data. I learned to use .dotenv to hide sensitive information while connecting to my mysql database. I also learn the use of association to connect data base together with sequelize instead of connecting the database with mysql queries. 
+Instead of using mysql, we have learned how to use Sequelize instead to make data storing a lot easier.  
 
 ## Installation
 
-After cloning all the files from the respository you would need to install a few packages to be able to run this application. First you will need to install mysql into your computer. Then You would need node.js, mysql2.js, sequelize, dotenv and  express. With the included package.json file in the repository you would only need to run "npm install" after installing node.js into your local machine. 
+-Clone my repo at https://github.com/nguyet33/E-Com-DB
+-run npm i 
+-create a dotenv for local info as it is required in my code
+-run/test the needed route using insomnia.
 
 ## Usage
 - install mysql
@@ -31,6 +32,7 @@ After cloning all the files from the respository you would need to install a few
 ## Credits
 Jason Nguyen -UW Bootcamp
 Nhan Duong -UW Bootcamp
+Howard Lee - UW Bootcamp
 
 ## License
 
