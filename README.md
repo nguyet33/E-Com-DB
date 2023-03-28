@@ -25,9 +25,7 @@ Instead of using mysql, we have learned how to use Sequelize instead to make dat
 - make a post request to the server for each router (category, product, tag) with body data
 - make a Delete request to the server for each router (category, product, tag) with a parameter
 
-
 [link to walk through video](https://drive.google.com/file/d/1DaYLPjM5G8PWTG7pg3BuAuefhyMf5gcH/view)
-
 
 ## Credits
 Jason Nguyen -UW Bootcamp

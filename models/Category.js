@@ -11,10 +11,8 @@ Category.init(
       primaryKey: true,
       allowNull : false, 
     },
-
     category_name: { type: DataTypes.STRING, allowNull: false}
     },
-
   {
     sequelize,
     timestamps: false,
@@ -23,5 +21,4 @@ Category.init(
     modelName: 'category',
   }
 );
-
 module.exports = Category;
