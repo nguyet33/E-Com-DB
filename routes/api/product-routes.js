@@ -1,46 +1,75 @@
 const router = require('express').Router();
-const { Product, Category, Tag, ProductTag} = require('../../models');
+const { Product, Category, Tag, ProductTag } = require('../../models');
 
+// The `/api/products` endpoint
 
-// get route that returns all the products in the product table
-// it includes the category detail by using the category_id and associating it to the primary id in category table
-// also includes tag detail but junction table by using product_id and tag_id 
+// get all products
 router.get('/', (req, res) => {
+  // find all products
   Product.findAll({
-    include:[Category,Tag],
-    exclude: ['categoryId']
-  }) .then((data) => {
-      res.status(200).json(data);
-  })
-  .catch((err) => console.log(err));
+    attributes: ['id', 'product_name', 'category_id', 'stock', 'price'],
+    // be sure to include its associated Category and Tag data
+    include: [
+      {model: Category, attributes: ['id', 'category_name']},
+
+      {model: Tag, attributes: ['id', 'tag_name']}
+    ]})
+
+    .then(productData => res.json(productData))
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+
 });
 
-// get route that takes in a param and returns one products in the product table at the index
-// it includes the category detail by using the category_id and associating it to the primary id in category table
-// also includes tag detail but junction table by using product_id and tag_id 
+// get one product
 router.get('/:id', (req, res) => {
-  Product.findByPk(req.params.id,{ 
-    include:[Category,Tag]
-  }) .then((data) => {
-      res.status(200).json(data);
-  })
-  .catch((err) => console.log(err));  
+  // find a single product by its `id`  
+  Product.findOne({
+    where: {id: req.params.id},
+    attributes: ['id', 'product_name', 'category_id', 'stock', 'price', 'stock'],
+    // be sure to include its associated Category and Tag data
+    include: [
+      {model: Category, attributes: ['id', 'category_name']},
+
+      {model: Tag, attributes: ['id', 'tag_name']}
+    ]})
+
+    .then(productData => {
+      if (!productData) {res.status(404).json ({ message: 'NOT FOUND'}); 
+        return; 
+      }
+      res.json(productData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
-// post route that creates a new product with the information passed into the body of the post request
-// it then checks if theres anythign in the tag if so then it creates and product_tag entry
+// create new product
 router.post('/', (req, res) => {
-  Product.create(req.body)
-    .then((product) => {
+   // req.body should look like this...
+    Product.create({
+    // product_name: "Basketball",
+    product_name: req.body.product_name,
+    // price: 200.00,
+    price: req.body.price,
+    // stock: 3,
+    stock: req.body.stock,
+    // tagIds: [1, 2, 3, 4]
+    tagIds: req.body.tag_id
+  })
+ 
+  .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
       if (req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
-          return {
-            product_id: product.id,
-            tag_id,
-          };
+          return {product_id: product.id, tag_id,};
         });
-        return ProductTag.bulkCreate(productTagIdArr);
+
+          return ProductTag.bulkCreate(productTagIdArr);
       }
       // if no product tags, just respond
       res.status(200).json(product);
@@ -52,19 +81,18 @@ router.post('/', (req, res) => {
     });
 });
 
-//put route that takes in a param and data from the body that updates a product
-//then it finds all associate tag from product_tag and compares which tag isnt in the updated product
+// update product
 router.put('/:id', (req, res) => {
   // update product data
   Product.update(req.body, {
-    where: {
-      id: req.params.id,
-    },
+    where: {id: req.params.id,}
   })
+
     .then((product) => {
       // find all associated tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
     })
+
     .then((productTags) => {
       // get list of current tag_ids
       const productTagIds = productTags.map(({ tag_id }) => tag_id);
@@ -72,15 +100,13 @@ router.put('/:id', (req, res) => {
       const newProductTags = req.body.tagIds
         .filter((tag_id) => !productTagIds.includes(tag_id))
         .map((tag_id) => {
-          return {
-            product_id: req.params.id,
-            tag_id,
-          };
+          return {product_id: req.params.id, tag_id,};
         });
+
       // figure out which ones to remove
       const productTagsToRemove = productTags
-        .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
-        .map(({ id }) => id);
+
+        .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id)).map(({ id }) => id);
 
       // run both actions
       return Promise.all([
@@ -88,6 +114,7 @@ router.put('/:id', (req, res) => {
         ProductTag.bulkCreate(newProductTags),
       ]);
     })
+
     .then((updatedProductTags) => res.json(updatedProductTags))
     .catch((err) => {
       // console.log(err);
@@ -95,25 +122,23 @@ router.put('/:id', (req, res) => {
     });
 });
 
-//delete route that takes in a param and delete that product in the index. 
 router.delete('/:id', (req, res) => {
+  // delete one product by its `id` value
   Product.destroy({
-    where:{
-        id:req.params.id
-    }
-  }).then(data=>{
-      if(data){
-          return res.json(data)
-      } else {
-          return res.status(404).json({msg:"no such record"})
-      }
-  }).catch(err=>{
-      console.log(err);
-      res.status(500).json({
-          msg:"an error occurred",
-          err:err
-      })
+    where: {id: req.params.id}
   })
+
+  .then(productData => {
+    if (!productData) {res.status(404).json({ message: 'NOT FOUND'});
+        return;
+    }
+    res.json(productData);
+})
+
+.catch(err => {
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 module.exports = router;
