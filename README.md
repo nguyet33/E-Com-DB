@@ -26,7 +26,7 @@ Instead of using mysql, we have learned how to use Sequelize instead to make dat
 - make a Delete request to the server for each router (category, product, tag) with a parameter
 
 
-[link to walk through video](https://drive.google.com/file/d/1B88jNzrQisqJNC5V3OZFBxL6S8N9W4rK/view)
+[link to walk through video](https://drive.google.com/file/d/1DaYLPjM5G8PWTG7pg3BuAuefhyMf5gcH/view)
 
 
 ## Credits
