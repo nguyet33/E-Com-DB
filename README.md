@@ -82,9 +82,7 @@ None
 ![Screenshot 2023-04-11 at 4 55 53 PM](https://user-images.githubusercontent.com/120419348/231313220-302e5a3e-a95a-459b-9320-d4ab4b0f2ad1.png)  
 
 ## Video 
-https://drive.google.com/file/d/15yZJXGJWfRzRc3rMxpbbqxm1Xi90akyS/view  
-  
-[Untitled_ Apr 5, 2023 1_14 PM.webm](https://user-images.githubusercontent.com/120419348/230199771-a2af84d9-610a-434e-ad29-efd5a2390754.webm)
+https://drive.google.com/file/d/1DaYLPjM5G8PWTG7pg3BuAuefhyMf5gcH/view
 
 ## Questions:
 - Github: [nguyet33](https://github.com/nguyet33)
